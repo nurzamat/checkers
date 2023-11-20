@@ -1,26 +1,24 @@
+import java.util.Scanner;
+
 public class Main {
 
 public static void main(String[] args){
 
-    String row8 = "8 | |w| |w| |w| |w|";
-    String row7 = "7 |w| |w| |w| |w| |";
-    String row6 = "6 | |w| |w| |w| |w|";
-    String row5 = "5 | | | | | | | | |";
-    String row4 = "4 | | | | | | | | |";
-    String row3 = "3 |b| |b| |b| |b| |";
-    String row2 = "2 | |b| |b| |b| |b|";
-    String row1 = "1 |b| |b| |b| |b| |";
-    String x =    "   1 2 3 4 5 6 7 8";
+    Checkers checkers = new Checkers();
+    checkers.init();
+    checkers.drawBoard();
 
-    System.out.println(row8);
-    System.out.println(row7);
-    System.out.println(row6);
-    System.out.println(row5);
-    System.out.println(row4);
-    System.out.println(row3);
-    System.out.println(row2);
-    System.out.println(row1);
-    System.out.println(x);
+    Scanner myObj = new Scanner(System.in);
+    System.out.println("Enter coordinates in format row1column1 row2column2 to move a figure");
+
+    String coordinates = myObj.nextLine();  // Read user input
+    String[] array = coordinates.split(" ");
+    int iFrom = Integer.parseInt(String.valueOf(array[0].charAt(0))) - 1;
+    int jFrom = Integer.parseInt(String.valueOf(array[0].charAt(1))) - 1;
+    int iTo = Integer.parseInt(String.valueOf(array[1].charAt(0))) - 1;
+    int jTo = Integer.parseInt(String.valueOf(array[1].charAt(1))) - 1;
+
+    checkers.move(iFrom, jFrom, iTo, jTo);
 }
 
 }
