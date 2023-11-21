@@ -4,6 +4,7 @@ public class Checkers {
     int rows = 8;
     int columns = 8;
     String[][] board = new String[rows][columns];
+    int[][] cell = new int[rows][columns];
     String w = "w";
     String b = "b";
 
@@ -20,7 +21,6 @@ public class Checkers {
         board[2][3]=w;
         board[2][5]=w;
         board[2][7]=w;
-
         board[5][0]=b;
         board[5][2]=b;
         board[5][4]=b;
@@ -33,6 +33,40 @@ public class Checkers {
         board[7][2]=b;
         board[7][4]=b;
         board[7][6]=b;
+
+        //0-white cell, 1-black cell
+        cell[0][1]=1;
+        cell[0][3]=1;
+        cell[0][5]=1;
+        cell[0][7]=1;
+        cell[1][0]=1;
+        cell[1][2]=1;
+        cell[1][4]=1;
+        cell[1][6]=1;
+        cell[2][1]=1;
+        cell[2][3]=1;
+        cell[2][5]=1;
+        cell[2][7]=1;
+        cell[3][0]=1;
+        cell[3][2]=1;
+        cell[3][4]=1;
+        cell[3][6]=1;
+        cell[4][1]=1;
+        cell[4][3]=1;
+        cell[4][5]=1;
+        cell[4][7]=1;
+        cell[5][0]=1;
+        cell[5][2]=1;
+        cell[5][4]=1;
+        cell[5][6]=1;
+        cell[6][1]=1;
+        cell[6][3]=1;
+        cell[6][5]=1;
+        cell[6][7]=1;
+        cell[7][0]=1;
+        cell[7][2]=1;
+        cell[7][4]=1;
+        cell[7][6]=1;
     }
 
     public void move(int iFrom, int jFrom, int iTo, int jTo){
@@ -40,7 +74,20 @@ public class Checkers {
         if(figure == null || figure.isEmpty())
             throw new IllegalArgumentException("No such figure");
         if(board[iTo][jTo] != null && !board[iTo][jTo].trim().isEmpty())
-            throw new IllegalArgumentException("Incorrect moving");
+            throw new IllegalArgumentException("Incorrect move");
+
+        if(figure.equals(w)){
+            if(iTo<=iFrom)
+                throw new IllegalArgumentException("Incorrect move");
+        }
+
+        if(figure.equals(b)){
+            if(iTo>=iFrom)
+                throw new IllegalArgumentException("Incorrect move");
+        }
+
+        if(cell[iTo][jTo] == 0)
+            throw new IllegalArgumentException("Incorrect move");
 
         board[iFrom][jFrom] = "";
         board[iTo][jTo] = figure;
