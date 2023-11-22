@@ -1,3 +1,4 @@
+import java.util.HashMap;
 
 public class Checkers {
 
@@ -5,8 +6,9 @@ public class Checkers {
     int columns = 8;
     String[][] board = new String[rows][columns];
     int[][] cell = new int[rows][columns];
-    String w = "w";
-    String b = "b";
+    String w = "x";
+    String b = "o";
+    HashMap<Character, Integer> letterMap = new HashMap<>();
 
     public void init() {
         board[0][1]=w;
@@ -67,13 +69,24 @@ public class Checkers {
         cell[7][2]=1;
         cell[7][4]=1;
         cell[7][6]=1;
+
+        letterMap.put('a', 0);
+        letterMap.put('b', 1);
+        letterMap.put('c', 2);
+        letterMap.put('d', 3);
+        letterMap.put('e', 4);
+        letterMap.put('f', 5);
+        letterMap.put('g', 6);
+        letterMap.put('h', 7);
     }
 
     public void move(int iFrom, int jFrom, int iTo, int jTo){
         String figure = board[iFrom][jFrom];
-        if(figure == null || figure.isEmpty())
+        if(figure == null)
             throw new IllegalArgumentException("No such figure");
-        if(board[iTo][jTo] != null && !board[iTo][jTo].trim().isEmpty())
+        if(iFrom == iTo || jFrom == jTo)
+            throw new IllegalArgumentException("Incorrect move");
+        if(board[iTo][jTo] != null)
             throw new IllegalArgumentException("Incorrect move");
 
         if(figure.equals(w)){
@@ -89,14 +102,49 @@ public class Checkers {
         if(cell[iTo][jTo] == 0)
             throw new IllegalArgumentException("Incorrect move");
 
-        board[iFrom][jFrom] = "";
+        int step = Math.abs(iFrom-iTo);
+        if(step > 2)
+            throw new IllegalArgumentException("Incorrect move");
+
+        if(step == 2){
+            //check for deletion
+            int iOpponent;
+            int jOpponent;
+            if(iTo>iFrom)
+                iOpponent = iFrom + 1;
+            else iOpponent = iTo + 1;
+
+            if(jTo>jFrom)
+                jOpponent = jFrom + 1;
+            else jOpponent = jTo + 1;
+
+            if(board[iOpponent][jOpponent].equals(figure))
+                throw new IllegalArgumentException("Incorrect move");
+            else board[iOpponent][jOpponent]=null;
+
+        }
+
+        board[iFrom][jFrom] = null;
         board[iTo][jTo] = figure;
 
-        drawBoard();
+    }
+
+    public void move(String input) {
+        if(input == null || input.trim().isEmpty())
+            throw new IllegalArgumentException("Incorrect parameters");
+        input = input.replace(" ", "");
+        int jFrom = letterMap.get(input.charAt(0));
+        int iFrom = Integer.parseInt(String.valueOf(input.charAt(1))) - 1;
+
+        int iTo = Integer.parseInt(String.valueOf(input.charAt(3))) - 1;
+        int jTo = letterMap.get(input.charAt(2));
+
+        move(iFrom, jFrom, iTo, jTo);
     }
 
     public void drawBoard(){
-        System.out.println("   1 2 3 4 5 6 7 8");
+        System.out.println("   a b c d e f g h");
+        System.out.println("  -----------------");
         StringBuilder sb = new StringBuilder();
         String cell;
         for(int i = 0; i < rows; i++){
@@ -104,12 +152,18 @@ public class Checkers {
                 if(j==0)
                     sb.append(i+1+" |");
                 cell = board[i][j];
-                if(cell != null && !cell.isEmpty())
+                if(cell != null)
                     sb.append(cell + "|");
                 else sb.append(" |");
             }
             System.out.println(sb);
             sb.setLength(0);
         }
+
+        System.out.println("  -----------------");
+        System.out.println("   a b c d e f g h");
     }
 }
+
+
+
